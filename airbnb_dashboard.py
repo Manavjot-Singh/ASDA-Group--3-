@@ -1,12 +1,7 @@
 # /// script
-# requires-python = ">=3.13,<3.14"
+# requires-python = ">=3.12,<3.14"
 # dependencies = [
-#     "altair==6.3.0",
 #     "marimo>=0.25.2",
-#     "numpy==2.5.5",
-#     "openpyxl==3.1.5",
-#     "pandas==3.1.1",
-#     "pingouin==0.7.0",
 # ]
 # ///
 
@@ -113,18 +108,17 @@ def _(df, np):
 
 
 @app.cell
-def _(variable):
-    variable
-    return
-
-
-@app.cell
 def _(alt, df, mo, variable):
     #connecting variable with df by function
     try:
         selected_variable = variable.value
+        cols_to_use = ["log_price", selected_variable]
+        df_chart = df[cols_to_use].dropna()
 
     #Assisted by AI
+    # samping
+        if len(df_chart) > 5000:
+            df_chart = df_chart.sample(n=5000, random_state=42)
     # making tittle's dicts
         titles = {
             "room_type": "Room Type",
@@ -135,10 +129,10 @@ def _(alt, df, mo, variable):
         selected_title = titles.get(selected_variable, "Variable")
 
         # making altair boxplot
-        chart = alt.Chart(df).mark_boxplot().encode(
+        chart = alt.Chart(df_chart).mark_boxplot().encode(
             x=alt.X(selected_variable, title=selected_title),
             y=alt.Y("log_price:Q", title="Log Price"),
-            color=alt.Color(selected_variable, legend=None)
+            color=alt.X(f"{selected_variable}:N", legend=None)
         ).properties(
             title=f"Distribution of Log Price by {selected_title}",
             width=600,
@@ -149,6 +143,12 @@ def _(alt, df, mo, variable):
         output = mo.callout(f"Error loading chart: {e}", kind="danger")
 
     output
+    return
+
+
+@app.cell
+def _(variable):
+    variable
     return
 
 
