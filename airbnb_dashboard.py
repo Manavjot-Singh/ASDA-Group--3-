@@ -1,7 +1,12 @@
 # /// script
 # requires-python = ">=3.12,<3.14"
 # dependencies = [
+#     "altair==6.3.0",
 #     "marimo>=0.25.2",
+#     "numpy==2.5.5",
+#     "openpyxl==3.1.5",
+#     "pandas==3.1.1",
+#     "pingouin==0.7.0",
 # ]
 # ///
 
@@ -823,6 +828,11 @@ def _(alt, df, factor_a, factor_b, mo, pg):
             ])
 
     custom_out
+    return
+
+
+@app.cell
+def _():
     return
 
 
